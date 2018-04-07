@@ -14,6 +14,6 @@ namespace chillerlan\MagicAPI;
 
 use chillerlan\Traits\ContainerAbstract;
 
-class EndpointMap extends ContainerAbstract{
+abstract class EndpointMap extends ContainerAbstract implements EndpointMapInterface{
 
 }
