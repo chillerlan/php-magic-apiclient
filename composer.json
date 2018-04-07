@@ -1,0 +1,40 @@
+{
+	"name": "chillerlan/php-magic-apiclient",
+	"description": "A magic API client for PHP7.2+.",
+	"homepage": "https://github.com/chillerlan/php-magic-apiclient",
+	"license": "MIT",
+	"type": "library",
+	"minimum-stability": "stable",
+	"keywords": [
+		"api", "client", "magic"
+	],
+	"authors": [
+		{
+			"name": "smiley",
+			"email": "smiley@chillerlan.net",
+			"homepage": "https://github.com/codemasher"
+		}
+	],
+	"support": {
+		"issues": "https://github.com/chillerlan/php-magic-apiclient/issues",
+		"source": "https://github.com/chillerlan/php-magic-apiclient"
+	},
+	"require": {
+		"php": "^7.2",
+		"chillerlan/php-traits": "^1.1",
+		"chillerlan/php-log": "^1.0"
+	},
+	"require-dev": {
+		"phpunit/phpunit": "^7.1"
+	},
+	"autoload": {
+		"psr-4": {
+			"chillerlan\\MagicAPI\\": "src/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"chillerlan\\MagicAPITest\\": "tests/"
+		}
+	}
+}
