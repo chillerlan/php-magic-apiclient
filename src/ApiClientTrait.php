@@ -12,6 +12,8 @@
 
 namespace chillerlan\MagicAPI;
 
+use chillerlan\Logger\LogTrait;
+use chillerlan\Traits\ClassLoader;
 use ReflectionClass;
 
 /**
@@ -24,15 +26,9 @@ use ReflectionClass;
  * from \chillerlan\HTTP\HTTPClientInterface:
  * @method request(string $url, array $params = null, string $method = null, $body = null, array $headers = null):HTTPResponseInterface
  * @method checkQueryParams(array $params, bool $booleans_as_string = null):array;
- *
- * from \Psr\Log\LoggerInterface
- * @method debug($message, array $context = array());
- *
- * from \chillerlan\Traits\ClassLoader
- * @method loadClass(string $class, string $type = null, ...$params)
  */
 trait ApiClientTrait{
-
+	use ClassLoader, LogTrait;
 	/**
 	 * @var \chillerlan\MagicAPI\EndpointMapInterface
 	 *
