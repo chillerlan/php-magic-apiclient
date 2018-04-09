@@ -44,7 +44,7 @@ trait EndpointDocblockTrait{
 				$args[] = 'array $params = [\''.implode('\', \'', $params['query']).'\']';
 			}
 
-			if(in_array($params['method'], ['POST', 'PUT', 'DELETE'])){
+			if(in_array($params['method'], ['PATCH', 'POST', 'PUT', 'DELETE'])){
 
 				if($params['body'] !== null){
 					$args[] = is_array($params['body']) ? 'array $body = [\''.implode('\', \'', $params['body']).'\']' : 'array $body = []';
