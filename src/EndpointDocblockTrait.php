@@ -32,7 +32,7 @@ trait EndpointDocblockTrait{
 
 			$args = [];
 
-			if(count($params['path_elements']) > 0){
+			if(isset($params['path_elements']) && count($params['path_elements']) > 0){
 
 				foreach($params['path_elements'] as $i){
 					$args[] = 'string $'.$i;
@@ -47,7 +47,7 @@ trait EndpointDocblockTrait{
 			if(in_array($params['method'], ['PATCH', 'POST', 'PUT', 'DELETE'])){
 
 				if($params['body'] !== null){
-					$args[] = is_array($params['body']) ? 'array $body = [\''.implode('\', \'', $params['body']).'\']' : 'array $body = []';
+					$args[] = is_array($params['body']) ? 'array  $body = [\''.implode('\', \'', $params['body']).'\']' : 'array $body = []';
 				}
 
 			}
