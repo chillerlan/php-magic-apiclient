@@ -12,8 +12,8 @@
 
 namespace chillerlan\MagicAPI;
 
-use chillerlan\Logger\LogTrait;
 use chillerlan\Traits\ClassLoader;
+use Psr\Log\LoggerAwareTrait;
 use ReflectionClass;
 
 /**
@@ -28,7 +28,7 @@ use ReflectionClass;
  * @method checkQueryParams(array $params, bool $booleans_as_string = null):array;
  */
 trait ApiClientTrait{
-	use ClassLoader, LogTrait;
+	use ClassLoader, LoggerAwareTrait;
 	/**
 	 * @var \chillerlan\MagicAPI\EndpointMapInterface
 	 *
@@ -98,7 +98,7 @@ trait ApiClientTrait{
 			$params = $this->checkQueryParams($params);
 			$body   = $this->checkQueryParams($body);
 
-			$this->debug('OAuthProvider::__call() -> '.(new ReflectionClass($this))->getShortName().'::'.$name.'()', [
+			$this->logger->debug('OAuthProvider::__call() -> '.(new ReflectionClass($this))->getShortName().'::'.$name.'()', [
 				'$endpoint' => $endpoint, '$params' => $params, '$method' => $method, '$body' => $body, '$headers' => $headers,
 			]);
 
