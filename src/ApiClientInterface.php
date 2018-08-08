@@ -12,6 +12,8 @@
 
 namespace chillerlan\MagicAPI;
 
+use chillerlan\HTTP\HTTPResponseInterface;
+
 interface ApiClientInterface{
 
 	/**
@@ -26,6 +28,6 @@ interface ApiClientInterface{
 	 * @return \chillerlan\HTTP\HTTPResponseInterface|null
 	 * @throws \chillerlan\MagicAPI\APIClientException
 	 */
-	public function __call(string $name, array $arguments);
+	public function __call(string $name, array $arguments):?HTTPResponseInterface;
 
 }

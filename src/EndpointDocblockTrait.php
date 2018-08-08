@@ -60,4 +60,51 @@ trait EndpointDocblockTrait{
 		return $str;
 	}
 
+	/**
+	 * @param string $interfaceName
+	 * @param string $returntype
+	 *
+	 * @return bool
+	 */
+	public function createInterface(string $interfaceName, string $returntype):bool{
+
+		$str = '<?php'.PHP_EOL.PHP_EOL
+		       .'namespace '.__NAMESPACE__.';'.PHP_EOL.PHP_EOL
+		       .'use \\'.$returntype.';'.PHP_EOL.PHP_EOL
+		       .'interface '.$interfaceName.'{'.PHP_EOL.PHP_EOL;
+
+		foreach($this as $methodName => $params){
+
+			$args = [];
+
+			if(count($params['path_elements']) > 0){
+
+				foreach($params['path_elements'] as $i){
+					$args[] = 'string $'.$i;
+				}
+
+			}
+
+			if(!empty($params['query'])){
+				$args[] = 'array $params = [\''.implode('\', \'', $params['query']).'\']';
+			}
+
+			if(in_array($params['method'], ['POST', 'PUT', 'DELETE'])){
+
+				if($params['body'] !== null){
+					$args[] = is_array($params['body']) ? 'array $body = [\''.implode('\', \'', $params['body']).'\']' : 'array $body = []';
+				}
+
+			}
+			$str.= "\t".'/**'.PHP_EOL;
+
+
+			$str.= "\t".' */'.PHP_EOL."\t".'public function '.$methodName.'('.implode(', ', $args).'):'.((new ReflectionClass($returntype))->getShortName()).';'.PHP_EOL.PHP_EOL;
+		}
+
+		$str .= PHP_EOL.'}'.PHP_EOL;
+
+		return (bool)file_put_contents(__DIR__.'/'.$interfaceName.'.php', $str);
+	}
+
 }

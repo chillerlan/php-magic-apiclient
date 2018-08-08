@@ -12,8 +12,8 @@
 
 namespace chillerlan\MagicAPI;
 
-use chillerlan\Traits\ContainerInterface;
+use chillerlan\Traits\ImmutableSettingsInterface;
 
-interface EndpointMapInterface extends ContainerInterface{
+interface EndpointMapInterface extends ImmutableSettingsInterface{
 
 }

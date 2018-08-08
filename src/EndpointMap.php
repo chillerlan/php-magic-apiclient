@@ -12,8 +12,8 @@
 
 namespace chillerlan\MagicAPI;
 
-use chillerlan\Traits\ContainerAbstract;
+use chillerlan\Traits\ImmutableSettingsAbstract;
 
-abstract class EndpointMap extends ContainerAbstract implements EndpointMapInterface{
+abstract class EndpointMap extends ImmutableSettingsAbstract implements EndpointMapInterface{
 
 }

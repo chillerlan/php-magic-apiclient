@@ -12,6 +12,7 @@
 
 namespace chillerlan\MagicAPI;
 
+use chillerlan\HTTP\HTTPResponseInterface;
 use chillerlan\Traits\ClassLoader;
 use Psr\Log\LoggerAwareTrait;
 use ReflectionClass;
@@ -59,7 +60,7 @@ trait ApiClientTrait{
 	 * @return \chillerlan\HTTP\HTTPResponseInterface|null
 	 * @throws \chillerlan\MagicAPI\APIClientException
 	 */
-	public function __call(string $name, array $arguments){
+	public function __call(string $name, array $arguments):?HTTPResponseInterface{
 
 		if($this->endpoints instanceof EndpointMapInterface && $this->endpoints->__isset($name)){
 			$m = $this->endpoints->{$name};
