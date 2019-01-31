@@ -6,7 +6,7 @@
 	"type": "library",
 	"minimum-stability": "stable",
 	"keywords": [
-		"api", "client", "magic"
+		"api", "http", "client", "magic"
 	],
 	"authors": [
 		{
@@ -20,22 +20,21 @@
 		"source": "https://github.com/chillerlan/php-magic-apiclient"
 	},
 	"require": {
-		"php": "^7.2",
-		"chillerlan/php-traits": "^2.0"
+		"php": "^7.2"
 	},
 	"require-dev": {
-		"chillerlan/php-httpinterface": "^2.0",
-		"phpunit/phpunit": "^7.3",
+		"chillerlan/php-httpinterface": "dev-master",
+		"phpunit/phpunit": "^7.5",
 		"psr/log": "^1.0"
 	},
 	"autoload": {
 		"psr-4": {
-			"chillerlan\\MagicAPI\\": "src/"
+			"chillerlan\\HTTP\\MagicAPI\\": "src/"
 		}
 	},
 	"autoload-dev": {
 		"psr-4": {
-			"chillerlan\\MagicAPITest\\": "tests/"
+			"chillerlan\\HTTPTest\\MagicAPI\\": "tests/"
 		}
 	}
 }

@@ -3,17 +3,19 @@
  * Class EndpointMap
  *
  * @filesource   EndpointMap.php
- * @created      07.04.2018
- * @package      chillerlan\MagicAPI
+ * @created      01.09.2018
+ * @package      chillerlan\HTTP\MagicAPI
  * @author       smiley <smiley@chillerlan.net>
  * @copyright    2018 smiley
  * @license      MIT
  */
 
-namespace chillerlan\MagicAPI;
+namespace chillerlan\HTTP\MagicAPI;
 
-use chillerlan\Traits\ImmutableSettingsAbstract;
+use chillerlan\Settings\SettingsContainerAbstract;
 
-abstract class EndpointMap extends ImmutableSettingsAbstract implements EndpointMapInterface{
+abstract class EndpointMap extends SettingsContainerAbstract implements EndpointMapInterface{
+
+	protected $API_BASE = '';
 
 }

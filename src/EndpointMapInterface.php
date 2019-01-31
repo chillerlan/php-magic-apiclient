@@ -3,17 +3,20 @@
  * Interface EndpointMapInterface
  *
  * @filesource   EndpointMapInterface.php
- * @created      07.04.2018
- * @package      chillerlan\MagicAPI
+ * @created      01.09.2018
+ * @package      chillerlan\HTTP\MagicAPI
  * @author       smiley <smiley@chillerlan.net>
  * @copyright    2018 smiley
  * @license      MIT
  */
 
-namespace chillerlan\MagicAPI;
+namespace chillerlan\HTTP\MagicAPI;
 
-use chillerlan\Traits\ImmutableSettingsInterface;
+use chillerlan\Settings\SettingsContainerInterface;
 
-interface EndpointMapInterface extends ImmutableSettingsInterface{
+/**
+ * @property string $API_BASE
+ */
+interface EndpointMapInterface extends SettingsContainerInterface{
 
 }

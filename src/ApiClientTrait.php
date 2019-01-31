@@ -4,17 +4,17 @@
  *
  * @filesource   ApiClientTrait.php
  * @created      07.04.2018
- * @package      chillerlan\MagicAPI
+ * @package      chillerlan\HTTP\MagicAPI
  * @author       smiley <smiley@chillerlan.net>
  * @copyright    2018 smiley
  * @license      MIT
  */
 
-namespace chillerlan\MagicAPI;
+namespace chillerlan\HTTP\MagicAPI;
 
-use chillerlan\HTTP\HTTPResponseInterface;
-use chillerlan\Traits\ClassLoader;
-use Psr\Log\LoggerAwareTrait;
+use chillerlan\HTTP\Psr7;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Log\LoggerInterface;
 use ReflectionClass;
 
 /**
@@ -22,28 +22,39 @@ use ReflectionClass;
  *
  * @implements chillerlan\MagicAPI\ApiClientInterface
  *
- * @property string $endpointMap FQCN
- *
  * from \chillerlan\HTTP\HTTPClientInterface:
- * @method request(string $url, array $params = null, string $method = null, $body = null, array $headers = null):HTTPResponseInterface
- * @method checkQueryParams(array $params, bool $booleans_as_string = null):array;
+ * @method request(string $url, string $method = null, array $params = null, $body = null, array $headers = null):ResponseInterface
  */
 trait ApiClientTrait{
-	use ClassLoader, LoggerAwareTrait;
+
 	/**
-	 * @var \chillerlan\MagicAPI\EndpointMapInterface
+	 * The logger instance.
+	 *
+	 * @var \Psr\Log\LoggerInterface
+	 */
+	protected $logger;
+
+	/**
+	 * @var \chillerlan\HTTP\MagicAPI\EndpointMapInterface
 	 *
 	 * method => [url, method, mandatory_params, params_in_url, ...]
 	 */
 	protected $endpoints;
 
 	/**
-	 * @return \chillerlan\MagicAPI\ApiClientInterface
+	 * @param string $endpointMap
+	 *
+	 * @return \chillerlan\HTTP\MagicAPI\ApiClientInterface
+	 * @throws \chillerlan\HTTP\MagicAPI\ApiClientException
 	 */
-	public function loadEndpoints():ApiClientInterface {
+	public function loadEndpoints(string $endpointMap):ApiClientInterface{
 
-		if(class_exists($this->endpointMap)){
-			$this->endpoints = $this->loadClass($this->endpointMap, EndpointMapInterface::class);
+		if(class_exists($endpointMap)){
+			$this->endpoints = new $endpointMap;
+
+			if(!$this->endpoints instanceof EndpointMapInterface){
+				throw new ApiClientException('invalid endpoint map');
+			}
 		}
 
 		/** @noinspection PhpIncompatibleReturnTypeInspection */
@@ -57,56 +68,79 @@ trait ApiClientTrait{
 	 * @param string $name
 	 * @param array  $arguments
 	 *
-	 * @return \chillerlan\HTTP\HTTPResponseInterface|null
-	 * @throws \chillerlan\MagicAPI\APIClientException
+	 * @return \Psr\Http\Message\ResponseInterface
+	 * @throws \chillerlan\HTTP\MagicAPI\APIClientException
 	 */
-	public function __call(string $name, array $arguments):?HTTPResponseInterface{
+	public function __call(string $name, array $arguments):ResponseInterface{
 
-		if($this->endpoints instanceof EndpointMapInterface && $this->endpoints->__isset($name)){
-			$m = $this->endpoints->{$name};
-
-			$endpoint      = $m['path'];
-			$method        = $m['method'] ?? 'GET';
-			$body          = null;
-			$headers       = isset($m['headers']) && is_array($m['headers']) ? $m['headers'] : [];
-			$path_elements = $m['path_elements'] ?? [];
-			$params_in_url = count($path_elements);
-			$params        = $arguments[$params_in_url] ?? null;
-			$urlparams     = array_slice($arguments,0 , $params_in_url);
-
-			if($params_in_url > 0){
-
-				if(count($urlparams) < $params_in_url){
-					throw new APIClientException('too few URL params, required: '.implode(', ', $path_elements));
-				}
-
-				$endpoint = sprintf($endpoint, ...$urlparams);
-			}
-
-			if(in_array($method, ['POST', 'PATCH', 'PUT', 'DELETE'])){
-				$body = $arguments[$params_in_url + 1] ?? $params;
-
-				if($params === $body){
-					$params = null;
-				}
-
-				if(is_array($body) && isset($headers['Content-Type']) && strpos($headers['Content-Type'], 'json') !== false){
-					$body = json_encode($body);
-				}
-
-			}
-
-			$params = $this->checkQueryParams($params);
-			$body   = $this->checkQueryParams($body);
-
-			$this->logger->debug('OAuthProvider::__call() -> '.(new ReflectionClass($this))->getShortName().'::'.$name.'()', [
-				'$endpoint' => $endpoint, '$params' => $params, '$method' => $method, '$body' => $body, '$headers' => $headers,
-			]);
-
-			return $this->request($endpoint, $params, $method, $body, $headers);
+		if(!$this->endpoints instanceof EndpointMapInterface || !$this->endpoints->__isset($name)){
+			throw new ApiClientException('endpoint not found');
 		}
 
-		return null;
+		$m = $this->endpoints->{$name};
+
+		$endpoint      = $this->endpoints->API_BASE.$m['path'];
+		$method        = $m['method'] ?? 'GET';
+		$body          = null;
+		$headers       = Psr7\normalize_request_headers(isset($m['headers']) && is_array($m['headers']) ? $m['headers'] : []);
+		$path_elements = $m['path_elements'] ?? [];
+		$params_in_url = count($path_elements);
+		$params        = $arguments[$params_in_url] ?? [];
+		$urlparams     = array_slice($arguments, 0, $params_in_url);
+
+		if($params_in_url > 0){
+
+			if(count($urlparams) < $params_in_url){
+				throw new APIClientException('too few URL params, required: '.implode(', ', $path_elements));
+			}
+
+			$endpoint = sprintf($endpoint, ...$urlparams);
+		}
+
+		if(in_array($method, ['DELETE', 'POST', 'PATCH', 'PUT'], true)){
+			$body = $arguments[$params_in_url + 1] ?? $params;
+
+			if($params === $body){
+				$params = [];
+			}
+
+			if(is_iterable($body)){
+				$body = Psr7\clean_query_params($body);
+			}
+
+
+			if((is_array($body) || is_object($body)) && !empty($body)){
+
+				if(!isset($headers['Content-type'])){
+					$headers['Content-type'] = 'application/x-www-form-urlencoded';
+				}
+
+				if($headers['Content-type'] === 'application/x-www-form-urlencoded'){
+					$body = http_build_query($body, '', '&', PHP_QUERY_RFC1738);
+				}
+				elseif($headers['Content-type'] === 'application/json'){
+					$body = json_encode($body);
+				}
+				else{
+					$body = null; // @todo
+				}
+
+			}
+
+
+		}
+
+		$params = Psr7\clean_query_params($params);
+
+		if($this->logger instanceof LoggerInterface){
+
+			$this->logger->debug('ApiClientTrait::__call() -> '.(new ReflectionClass($this))->getShortName().'::'.$name.'()', [
+				'$endpoint' => $endpoint, '$method' => $method, '$params' => $params, '$body' => $body, '$headers' => $headers,
+			]);
+
+		}
+
+		return $this->request($endpoint, $method, $params, $body, $headers);
 	}
 
 }

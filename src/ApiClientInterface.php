@@ -3,31 +3,26 @@
  * Interface ApiClientInterface
  *
  * @filesource   ApiClientInterface.php
- * @created      07.04.2018
- * @package      chillerlan\MagicAPI
+ * @created      01.09.2018
+ * @package      chillerlan\HTTP\MagicAPI
  * @author       smiley <smiley@chillerlan.net>
  * @copyright    2018 smiley
  * @license      MIT
  */
 
-namespace chillerlan\MagicAPI;
+namespace chillerlan\HTTP\MagicAPI;
 
-use chillerlan\HTTP\HTTPResponseInterface;
+use Psr\Http\Message\ResponseInterface;
 
 interface ApiClientInterface{
-
-	/**
-	 * @return \chillerlan\MagicAPI\ApiClientInterface
-	 */
-	public function loadEndpoints():ApiClientInterface;
 
 	/**
 	 * @param string $name
 	 * @param array  $arguments
 	 *
-	 * @return \chillerlan\HTTP\HTTPResponseInterface|null
-	 * @throws \chillerlan\MagicAPI\APIClientException
+	 * @return \Psr\Http\Message\ResponseInterface
+	 *
 	 */
-	public function __call(string $name, array $arguments):?HTTPResponseInterface;
+	public function __call(string $name, array $arguments):ResponseInterface;
 
 }
