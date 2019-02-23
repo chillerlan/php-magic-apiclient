@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 class MagicAPITest extends TestCase{
 
 	/**
-	 * @var \chillerlan\HTTP\HTTPClientInterface
+	 * @var \chillerlan\HTTP\Psr18\HTTPClientInterface
 	 */
 	protected $http;
 

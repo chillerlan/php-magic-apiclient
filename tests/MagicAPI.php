@@ -12,22 +12,21 @@
 
 namespace chillerlan\HTTPTest\MagicAPI;
 
-use chillerlan\HTTP\CurlClient;
+use chillerlan\HTTP\Psr18\CurlClient;
 use chillerlan\HTTP\MagicAPI\{ApiClientInterface, ApiClientTrait};
 use chillerlan\Settings\SettingsContainerInterface;
 use Psr\Http\Message\{RequestFactoryInterface, ResponseFactoryInterface, StreamFactoryInterface};
-use Psr\Log\LoggerAwareTrait;
+use Psr\Log\{LoggerAwareTrait, LoggerInterface};
 
 class MagicAPI extends CurlClient implements ApiClientInterface{
 	use ApiClientTrait, LoggerAwareTrait;
 
 	public function __construct(
 		SettingsContainerInterface $options = null,
-		RequestFactoryInterface $requestFactory = null,
 		ResponseFactoryInterface $responseFactory = null,
-		StreamFactoryInterface $streamFactory = null
+		LoggerInterface $logger = null
 	){
-		parent::__construct($options, $requestFactory, $responseFactory, $streamFactory);
+		parent::__construct($options, $responseFactory, $logger);
 
 		$this->loadEndpoints(MagicAPIEndpoints::class);
 	}
