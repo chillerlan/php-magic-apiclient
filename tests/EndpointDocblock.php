@@ -122,7 +122,7 @@ class EndpointDocblock{
 			$args = [];
 			$str.= "\t".'/**'.PHP_EOL;
 
-			if(is_array($params['path_elements']) && count($params['path_elements']) > 0){
+			if(isset($params['path_elements']) && is_array($params['path_elements']) && count($params['path_elements']) > 0){
 
 				foreach($params['path_elements'] as $i){
 					$a = 'string $'.$i;
@@ -139,7 +139,7 @@ class EndpointDocblock{
 				$args[] = $a;
 			}
 
-			if(in_array($params['method'], ['PATCH', 'POST', 'PUT', 'DELETE'])){
+			if(isset($params['method']) && in_array($params['method'], ['PATCH', 'POST', 'PUT', 'DELETE'])){
 
 				if($params['body'] !== null){
 					$a = is_array($params['body']) ? 'array $body = [\''.implode('\', \'', $params['body']).'\']' : 'array $body = []';
