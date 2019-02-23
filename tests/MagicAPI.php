@@ -15,7 +15,7 @@ namespace chillerlan\HTTPTest\MagicAPI;
 use chillerlan\HTTP\Psr18\CurlClient;
 use chillerlan\HTTP\MagicAPI\{ApiClientInterface, ApiClientTrait};
 use chillerlan\Settings\SettingsContainerInterface;
-use Psr\Http\Message\{RequestFactoryInterface, ResponseFactoryInterface, StreamFactoryInterface};
+use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Log\{LoggerAwareTrait, LoggerInterface};
 
 class MagicAPI extends CurlClient implements ApiClientInterface{
