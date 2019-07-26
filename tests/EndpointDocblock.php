@@ -97,16 +97,17 @@ class EndpointDocblock{
 	}
 
 	/**
-	 * @param string $name
-	 * @param string $returntype
+	 * @param string      $name
+	 * @param string      $returntype
+	 * @param string|null $namespace
 	 *
 	 * @return bool
 	 */
-	public function createInterface(string $name, string $returntype):bool{
+	public function createInterface(string $name, string $returntype, string $namespace = null):bool{
 		$interfaceName = $name.'Interface';
 
 		$str = '<?php'.PHP_EOL.PHP_EOL
-		       .'namespace '.__NAMESPACE__.';'.PHP_EOL.PHP_EOL
+		       .'namespace '.($namespace ?? __NAMESPACE__).';'.PHP_EOL.PHP_EOL
 		       .'use \\'.$returntype.';'.PHP_EOL.PHP_EOL
 		       .'interface '.$interfaceName.'{'.PHP_EOL.PHP_EOL;
 
