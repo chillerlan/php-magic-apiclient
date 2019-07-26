@@ -20,12 +20,13 @@
 		"source": "https://github.com/chillerlan/php-magic-apiclient"
 	},
 	"require": {
-		"php": "^7.2"
+		"php": "^7.2",
+		"ext-json": "*"
 	},
 	"require-dev": {
 		"chillerlan/php-httpinterface": "^3.0",
-		"phpunit/phpunit": "^7.5",
-		"psr/log": "^1.0"
+		"phpunit/phpunit": "^8.2",
+		"psr/log": "^1.1"
 	},
 	"autoload": {
 		"psr-4": {
