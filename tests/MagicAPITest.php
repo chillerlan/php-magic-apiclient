@@ -23,7 +23,7 @@ class MagicAPITest extends TestCase{
 	 */
 	protected $http;
 
-	protected function setUp(){
+	protected function setUp():void{
 		$options = new HTTPOptions(['ca_info' => __DIR__.'/cacert.pem']);
 
 		$this->http = new MagicAPI($options);
@@ -46,7 +46,6 @@ class MagicAPITest extends TestCase{
 	 * @param $extra_headers
 	 */
 	public function testRequest(string $method, array $extra_headers){
-		$r = $this->http->{$method}();
 
 		try{
 			$response = $this->http->{$method}(['foo' => 'bar'], ['huh' => 'wtf']);
@@ -66,7 +65,7 @@ class MagicAPITest extends TestCase{
 			$this->assertSame('bar', $json->args->foo);
 			$this->assertSame('nope', $json->headers->What);
 
-			if(in_array($method, ['patch', 'post', 'put'])){
+			if(\in_array($method, ['patch', 'post', 'put'])){
 
 				if(isset($extra_headers['content-type']) && $extra_headers['content-type'] === 'application/json'){
 					$this->assertSame('wtf', $json->json->huh);

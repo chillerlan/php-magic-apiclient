@@ -50,10 +50,11 @@ class EndpointDocblock{
 			throw new ApiClientException('invalid endpoint map');
 		}
 
-		$str = '/**'.PHP_EOL;
+		$n   = \PHP_EOL;
+		$str = '/**'.$n;
 
 		$ep = $this->endpointMap->toArray();
-		ksort($ep);
+		\ksort($ep);
 
 		foreach($ep as $methodName => $params){
 
@@ -63,7 +64,7 @@ class EndpointDocblock{
 
 			$args = [];
 
-			if(isset($params['path_elements']) && count($params['path_elements']) > 0){
+			if(isset($params['path_elements']) && \count($params['path_elements']) > 0){
 
 				foreach($params['path_elements'] as $i){
 					$args[] = 'string $'.$i;
@@ -72,26 +73,26 @@ class EndpointDocblock{
 			}
 
 			if(isset($params['query']) && !empty($params['query'])){
-				$args[] = 'array $params = [\''.implode('\', \'', $params['query']).'\']';
+				$args[] = 'array $params = [\''.\implode('\', \'', $params['query']).'\']';
 			}
 
-			if(isset($params['method']) && in_array($params['method'], ['PATCH', 'POST', 'PUT', 'DELETE'], true)){
+			if(isset($params['method']) && \in_array($params['method'], ['PATCH', 'POST', 'PUT', 'DELETE'], true)){
 
 				if($params['body'] !== null){
-					$args[] = is_array($params['body']) ? 'array $body = [\''.implode('\', \'', $params['body']).'\']' : 'array $body = []';
+					$args[] = \is_array($params['body']) ? 'array $body = [\''.\implode('\', \'', $params['body']).'\']' : 'array $body = []';
 				}
 
 			}
 
-			$str.= ' * @method \\'.$returntype.' '.$methodName.'('.implode(', ', $args).')'.PHP_EOL;
+			$str.= ' * @method \\'.$returntype.' '.$methodName.'('.\implode(', ', $args).')'.$n;
 		}
 
-		$str .= ' *'.'/'.PHP_EOL;
+		$str .= ' *'.'/'.$n;
 
 		$reflection = new ReflectionClass($this->provider);
 		$classfile  = $reflection->getFileName();
 
-		file_put_contents($classfile, str_replace($reflection->getDocComment().PHP_EOL, $str, file_get_contents($classfile)));
+		\file_put_contents($classfile, \str_replace($reflection->getDocComment().$n, $str, \file_get_contents($classfile)));
 
 		return $str;
 	}
@@ -105,14 +106,15 @@ class EndpointDocblock{
 	 */
 	public function createInterface(string $name, string $returntype, string $namespace = null):bool{
 		$interfaceName = $name.'Interface';
+		$n = \PHP_EOL;
 
-		$str = '<?php'.PHP_EOL.PHP_EOL
-		       .'namespace '.($namespace ?? __NAMESPACE__).';'.PHP_EOL.PHP_EOL
-		       .'use \\'.$returntype.';'.PHP_EOL.PHP_EOL
-		       .'interface '.$interfaceName.'{'.PHP_EOL.PHP_EOL;
+		$str = '<?php'.$n.$n
+		       .'namespace '.($namespace ?? __NAMESPACE__).';'.$n.$n
+		       .'use \\'.$returntype.';'.$n.$n
+		       .'interface '.$interfaceName.'{'.$n.$n;
 
 		$ep = $this->endpointMap->toArray();
-		ksort($ep);
+		\ksort($ep);
 
 		foreach($ep as $methodName => $params){
 
@@ -121,13 +123,13 @@ class EndpointDocblock{
 			}
 
 			$args = [];
-			$str.= "\t".'/**'.PHP_EOL;
+			$str.= "\t".'/**'.$n;
 
-			if(isset($params['path_elements']) && is_array($params['path_elements']) && count($params['path_elements']) > 0){
+			if(isset($params['path_elements']) && \is_array($params['path_elements']) && \count($params['path_elements']) > 0){
 
 				foreach($params['path_elements'] as $i){
 					$a = 'string $'.$i;
-					$str.= "\t".' * @param '.$a.PHP_EOL;
+					$str.= "\t".' * @param '.$a.$n;
 
 					$args[] = $a;
 				}
@@ -135,16 +137,16 @@ class EndpointDocblock{
 			}
 
 			if(!empty($params['query'])){
-				$a = 'array $params = [\''.implode('\', \'', $params['query']).'\']';
-				$str.= "\t".' * @param '.$a.PHP_EOL;
+				$a = 'array $params = [\''.\implode('\', \'', $params['query']).'\']';
+				$str.= "\t".' * @param '.$a.$n;
 				$args[] = $a;
 			}
 
-			if(isset($params['method']) && in_array($params['method'], ['PATCH', 'POST', 'PUT', 'DELETE'])){
+			if(isset($params['method']) && \in_array($params['method'], ['PATCH', 'POST', 'PUT', 'DELETE'])){
 
 				if($params['body'] !== null){
-					$a = is_array($params['body']) ? 'array $body = [\''.implode('\', \'', $params['body']).'\']' : 'array $body = []';
-					$str.= "\t".' * @param '.$a.PHP_EOL;
+					$a = \is_array($params['body']) ? 'array $body = [\''.\implode('\', \'', $params['body']).'\']' : 'array $body = []';
+					$str.= "\t".' * @param '.$a.$n;
 					$args[] = $a;
 				}
 
@@ -152,14 +154,14 @@ class EndpointDocblock{
 
 			$r = new ReflectionClass($returntype);
 
-			$str.= "\t".' * @return \\'.$r->getName().PHP_EOL;
-			$str.= "\t".' */'.PHP_EOL;
-			$str.= "\t".'public function '.$methodName.'('.implode(', ', $args).'):'.$r->getShortName().';'.PHP_EOL.PHP_EOL;
+			$str.= "\t".' * @return \\'.$r->getName().$n;
+			$str.= "\t".' */'.$n;
+			$str.= "\t".'public function '.$methodName.'('.\implode(', ', $args).'):'.$r->getShortName().';'.$n.$n;
 		}
 
-		$str .= '}'.PHP_EOL;
+		$str .= '}'.$n;
 
-		return (bool)file_put_contents(dirname((new ReflectionClass($this->provider))->getFileName()).'/'.$interfaceName.'.php', $str);
+		return (bool)\file_put_contents(\dirname((new ReflectionClass($this->provider))->getFileName()).'/'.$interfaceName.'.php', $str);
 	}
 
 }

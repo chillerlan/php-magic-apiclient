@@ -49,7 +49,7 @@ trait ApiClientTrait{
 	 */
 	public function loadEndpoints(string $endpointMap):ApiClientInterface{
 
-		if(class_exists($endpointMap)){
+		if(\class_exists($endpointMap)){
 			$this->endpoints = new $endpointMap;
 
 			if(!$this->endpoints instanceof EndpointMapInterface){
@@ -82,44 +82,44 @@ trait ApiClientTrait{
 		$endpoint      = $this->endpoints->API_BASE.$m['path'];
 		$method        = $m['method'] ?? 'GET';
 		$body          = null;
-		$headers       = Psr7\normalize_request_headers(isset($m['headers']) && is_array($m['headers']) ? $m['headers'] : []);
+		$headers       = Psr7\normalize_request_headers(isset($m['headers']) && \is_array($m['headers']) ? $m['headers'] : []);
 		$path_elements = $m['path_elements'] ?? [];
-		$params_in_url = count($path_elements);
+		$params_in_url = \count($path_elements);
 		$params        = $arguments[$params_in_url] ?? [];
-		$urlparams     = array_slice($arguments, 0, $params_in_url);
+		$urlparams     = \array_slice($arguments, 0, $params_in_url);
 
 		if($params_in_url > 0){
 
-			if(count($urlparams) < $params_in_url){
-				throw new APIClientException('too few URL params, required: '.implode(', ', $path_elements));
+			if(\count($urlparams) < $params_in_url){
+				throw new APIClientException('too few URL params, required: '.\implode(', ', $path_elements));
 			}
 
-			$endpoint = sprintf($endpoint, ...$urlparams);
+			$endpoint = \sprintf($endpoint, ...$urlparams);
 		}
 
-		if(in_array($method, ['DELETE', 'POST', 'PATCH', 'PUT'], true)){
+		if(\in_array($method, ['DELETE', 'POST', 'PATCH', 'PUT'], true)){
 			$body = $arguments[$params_in_url + 1] ?? $params;
 
 			if($params === $body){
 				$params = [];
 			}
 
-			if(is_iterable($body)){
+			if(\is_iterable($body)){
 				$body = Psr7\clean_query_params($body);
 			}
 
 
-			if((is_array($body) || is_object($body)) && !empty($body)){
+			if((\is_array($body) || \is_object($body)) && !empty($body)){
 
 				if(!isset($headers['Content-type'])){
 					$headers['Content-type'] = 'application/x-www-form-urlencoded';
 				}
 
 				if($headers['Content-type'] === 'application/x-www-form-urlencoded'){
-					$body = http_build_query($body, '', '&', PHP_QUERY_RFC1738);
+					$body = \http_build_query($body, '', '&', PHP_QUERY_RFC1738);
 				}
 				elseif($headers['Content-type'] === 'application/json'){
-					$body = json_encode($body);
+					$body = \json_encode($body);
 				}
 				else{
 					$body = null; // @todo
