@@ -30,7 +30,7 @@ class EndpointDocblock{
 	/**
 	 * EndpointDocblock constructor.
 	 *
-	 * @param                                                $provider
+	 * @param object|string                                  $provider
 	 * @param \chillerlan\HTTP\MagicAPI\EndpointMapInterface $endpointMap
 	 */
 	public function __construct($provider, EndpointMapInterface $endpointMap){
