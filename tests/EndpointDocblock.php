@@ -110,7 +110,7 @@ class EndpointDocblock{
 
 		$str = '<?php'.$n.$n
 		       .'namespace '.($namespace ?? __NAMESPACE__).';'.$n.$n
-		       .'use \\'.$returntype.';'.$n.$n
+		       .'use '.$returntype.';'.$n.$n
 		       .'interface '.$interfaceName.'{'.$n.$n;
 
 		$ep = $this->endpointMap->toArray();
