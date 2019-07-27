@@ -100,11 +100,13 @@ class EndpointDocblock{
 	 * @return bool
 	 */
 	public function createInterface(string $name, string $returntype, string $namespace = null):bool{
+		$reflection = new ReflectionClass($this->provider);
+
 		$interfaceName = $name.'Interface';
 		$n = \PHP_EOL;
 
 		$str = '<?php'.$n.$n
-		       .'namespace '.($namespace ?? __NAMESPACE__).';'.$n.$n
+		       .'namespace '.($namespace ?? $reflection->getNamespaceName()).';'.$n.$n
 		       .'use '.$returntype.';'.$n.$n
 		       .'interface '.$interfaceName.'{'.$n.$n;
 
@@ -156,7 +158,7 @@ class EndpointDocblock{
 
 		$str .= '}'.$n;
 
-		$file = \dirname((new ReflectionClass($this->provider))->getFileName()).'/'.$interfaceName.'.php';
+		$file = \dirname($reflection->getFileName()).'/'.$interfaceName.'.php';
 
 		return (bool)\file_put_contents($file, $str);
 	}
