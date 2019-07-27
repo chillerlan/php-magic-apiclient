@@ -42,13 +42,8 @@ class EndpointDocblock{
 	 * @param string $returntype
 	 *
 	 * @return string
-	 * @throws \chillerlan\HTTP\MagicAPI\ApiClientException
 	 */
 	public function create(string $returntype):string{
-
-		if(!$this->endpointMap instanceof EndpointMap){
-			throw new ApiClientException('invalid endpoint map');
-		}
 
 		$n   = \PHP_EOL;
 		$str = '/**'.$n;
@@ -161,7 +156,23 @@ class EndpointDocblock{
 
 		$str .= '}'.$n;
 
-		return (bool)\file_put_contents(\dirname((new ReflectionClass($this->provider))->getFileName()).'/'.$interfaceName.'.php', $str);
+		$file = \dirname((new ReflectionClass($this->provider))->getFileName()).'/'.$interfaceName.'.php';
+
+		return (bool)\file_put_contents($file, $str);
+	}
+
+	/**
+	 * @param string $name
+	 * @param int    $jsonOptions
+	 *
+	 * @return bool
+	 */
+	public function createJSON(string $name = null, int $jsonOptions = \JSON_PRETTY_PRINT):bool{
+		$reflection = new ReflectionClass($this->endpointMap);
+
+		$file = \dirname($reflection->getFileName()).'/'.($name ?? $reflection->getShortName()).'.json';
+
+		return (bool)\file_put_contents($file, $this->endpointMap->toJSON($jsonOptions));
 	}
 
 }
