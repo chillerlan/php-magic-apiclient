@@ -16,6 +16,6 @@ use chillerlan\Settings\SettingsContainerAbstract;
 
 abstract class EndpointMap extends SettingsContainerAbstract implements EndpointMapInterface{
 
-	protected $API_BASE = '';
+	protected string $API_BASE = '';
 
 }
