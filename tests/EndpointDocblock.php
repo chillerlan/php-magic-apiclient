@@ -21,15 +21,9 @@ use const JSON_PRETTY_PRINT, PHP_EOL;
 
 class EndpointDocblock{
 
-	/**
-	 * @var object
-	 */
-	protected $provider;
+	protected object $provider;
 
-	/**
-	 * @var \chillerlan\HTTP\MagicAPI\EndpointMapInterface
-	 */
-	protected $endpointMap;
+	protected EndpointMapInterface $endpointMap;
 
 	/**
 	 * EndpointDocblock constructor.
