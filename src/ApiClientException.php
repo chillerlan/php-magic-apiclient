@@ -12,4 +12,6 @@
 
 namespace chillerlan\HTTP\MagicAPI;
 
-class ApiClientException extends \Exception{}
+use Exception;
+
+class ApiClientException extends Exception{}
