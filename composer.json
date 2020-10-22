@@ -1,6 +1,6 @@
 {
 	"name": "chillerlan/php-magic-apiclient",
-	"description": "A magic API client for PHP7.2+.",
+	"description": "A magic API client for PHP7.4+.",
 	"homepage": "https://github.com/chillerlan/php-magic-apiclient",
 	"license": "MIT",
 	"type": "library",
@@ -20,9 +20,9 @@
 		"source": "https://github.com/chillerlan/php-magic-apiclient"
 	},
 	"require": {
-		"php": "^7.4",
+		"php": "^7.4 || ^8.0",
 		"ext-json": "*",
-		"chillerlan/php-settings-container":"^1.2",
+		"chillerlan/php-settings-container":"^2.1",
 		"psr/http-message":"^1.0"
 	},
 	"autoload": {
