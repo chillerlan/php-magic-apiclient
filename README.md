@@ -4,7 +4,6 @@ A magic API client for PHP 7.4+.
 
 [![version][packagist-badge]][packagist]
 [![license][license-badge]][license]
-[![Scrunitizer][scrutinizer-badge]][scrutinizer]
 [![Packagist downloads][downloads-badge]][downloads]
 [![PayPal donate][donate-badge]][donate]
 
@@ -12,8 +11,6 @@ A magic API client for PHP 7.4+.
 [packagist]: https://packagist.org/packages/chillerlan/php-magic-apiclient
 [license-badge]: https://img.shields.io/github/license/chillerlan/php-magic-apiclient.svg?style=flat-square
 [license]: https://github.com/chillerlan/php-magic-apiclient/blob/master/LICENSE
-[scrutinizer-badge]: https://img.shields.io/scrutinizer/g/chillerlan/php-magic-apiclient.svg?style=flat-square
-[scrutinizer]: https://scrutinizer-ci.com/g/chillerlan/php-magic-apiclient
 [downloads-badge]: https://img.shields.io/packagist/dt/chillerlan/php-magic-apiclient.svg?style=flat-square
 [downloads]: https://packagist.org/packages/chillerlan/php-magic-apiclient/stats
 [donate-badge]: https://img.shields.io/badge/donate-paypal-ff33aa.svg?style=flat-square
