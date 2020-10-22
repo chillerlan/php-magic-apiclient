@@ -1,6 +1,6 @@
 # chillerlan/php-magic-apiclient
 
-A magic API client for PHP 7.2+.
+A magic API client for PHP 7.4+.
 
 [![version][packagist-badge]][packagist]
 [![license][license-badge]][license]
@@ -22,7 +22,7 @@ A magic API client for PHP 7.2+.
 # Documentation
 
 ## Requirements
-- PHP 7.2+
+- PHP 7.4+
 
 ## Installation
 **requires [composer](https://getcomposer.org)**
@@ -31,16 +31,10 @@ A magic API client for PHP 7.2+.
 ```json
 {
 	"require": {
-		"php": "^7.2",
+		"php": "^7.4",
 		"chillerlan/php-magic-apiclient": "dev-master"
 	}
 }
 ```
-
-### Manual installation
-Download the desired version of the package from [master](https://github.com/chillerlan/php-magic-apiclient/archive/master.zip) or
-[release](https://github.com/chillerlan/php-magic-apiclient/releases) and extract the contents to your project folder.  After that:
-- run `composer install` to install the required dependencies and generate `/vendor/autoload.php`.
-- if you use a custom autoloader, point the namespace `chillerlan\HTTP\MagicAPI` to the folder `src` of the package
 
 Profit!
