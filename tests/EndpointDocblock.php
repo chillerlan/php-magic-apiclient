@@ -42,11 +42,10 @@ class EndpointDocblock{
 	 * @return string
 	 */
 	public function create(string $returntype):string{
-
 		$n   = PHP_EOL;
 		$str = '/**'.$n;
+		$ep  = $this->endpointMap->toArray();
 
-		$ep = $this->endpointMap->toArray();
 		ksort($ep);
 
 		foreach($ep as $methodName => $params){
@@ -98,17 +97,16 @@ class EndpointDocblock{
 	 * @return bool
 	 */
 	public function createInterface(string $name, string $returntype, string $namespace = null):bool{
-		$reflection = new ReflectionClass($this->provider);
-
+		$reflection    = new ReflectionClass($this->provider);
 		$interfaceName = $name.'Interface';
 		$n             = PHP_EOL;
+		$ep            = $this->endpointMap->toArray();
 
 		$str = '<?php'.$n.$n
 		       .'namespace '.($namespace ?? $reflection->getNamespaceName()).';'.$n.$n
 		       .'use '.$returntype.';'.$n.$n
 		       .'interface '.$interfaceName.'{'.$n.$n;
 
-		$ep = $this->endpointMap->toArray();
 		ksort($ep);
 
 		foreach($ep as $methodName => $params){
@@ -162,8 +160,8 @@ class EndpointDocblock{
 	}
 
 	/**
-	 * @param string $name
-	 * @param int    $jsonOptions
+	 * @param string|null $name
+	 * @param int         $jsonOptions
 	 *
 	 * @return bool
 	 */
